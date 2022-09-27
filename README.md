@@ -1,6 +1,6 @@
 # mycode
 
-Tracking my code
+Tracking my code. I want to learn how to version control projects with git.
 
 ## Getting Started
 
