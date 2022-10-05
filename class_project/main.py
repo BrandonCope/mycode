@@ -4,22 +4,15 @@
 
 def main():
     """ on runtime """
-    import json
     import os
-
-    print("Welcome To The Python Movie Library!\
-            \n Enter a MENU key to navigate...")
     
+    os.system('clear')
+    render_home()
     while True:
         menu_input = input("|  Home  |  Search  |  Exit  |\n")
         if menu_input.capitalize() == "Home":
             os.system('clear')
-            print("Our Top 10 Favorites")
-            movies = "./data/default_top10.json"
-            with open(movies, 'r') as openfile:
-                json_object = json.load(openfile)
-                for rank, movie in json_object.items():
-                    print(rank, ": ", movie)
+            render_home()
             
         if menu_input.capitalize() == "Search":
             os.system('clear')
@@ -29,6 +22,18 @@ def main():
         if menu_input.capitalize() == "Exit":
             os.system('clear')
             quit()
+
+def render_home():
+    import json
+
+    print("Welcome To The Python Movie Library!\
+            \n Enter a MENU key to navigate...")
+    print("Our Top 10 Favorites")
+    movies = "./data/default_top10.json"
+    with open(movies, 'r') as openfile:
+        json_object = json.load(openfile)
+        for rank, movie in json_object.items():
+            print(rank, ": ", movie)
 
 def search(input):
     import requests
