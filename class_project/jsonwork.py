@@ -12,7 +12,9 @@ def main():
     rank = 1
     while rank <= 10:
         input_movie = input(f"\nMovie#{rank}... ")
-        dict_movie[f"{rank}"] = input_movie
+        input_id = input("Movie ID key value: ")
+        dict_movie[f"{rank}"] = {input_movie : input_id}
+
         keep_going = input(f"\nEnter to continue, or \
         enter 'q' to quit: ")
         rank += 1
