@@ -8,29 +8,43 @@ def main():
     import json
     
     os.system('clear')
-    render_home(json)
+    current_page = "Home"
+    top10_data = render_home(json)
     while True:
         menu_input = input("|  Home  |  Search  |  Exit  |\n")
-        if menu_input.capitalize() == "Home":
-            os.system('clear')
-            render_home(json)
-            
-        if menu_input.capitalize() == "Search":
-            os.system('clear')
-            search_input = input('Input keyword, and hit ENTER to search...\
-                    or "q" to quit.\n ')
-            if search_input.lower() != 'q':
-                data = search(search_input)
-                if data:
-                    get_details(data, os)
-                else:
-                    print("No Match Found")
-            else:
+        if bool(menu_input):
+            if menu_input.capitalize() == "Home":
+                current_page == "Home"
                 os.system('clear')
+                top10_data = render_home(json)
+                
+            elif menu_input.capitalize() == "Search":
+                current_page == "Search"
+                os.system('clear')
+                search_input = input('Input keyword, and hit ENTER to search...\
+                        or "q" to quit.\n ')
+                if search_input.lower() != 'q':
+                    data = search(search_input)
+                    if data:
+                        get_details(data, os)
+                    else:
+                        print("No Match Found")
+                else:
+                    os.system('clear')
 
-        if menu_input.capitalize() == "Exit":
+            elif menu_input.capitalize() == "Exit":
+                os.system('clear')
+                quit()
+
+            elif current_page == "Home" and menu_input.isdigit():
+                if int(menu_input) >= 1 and int(menu_input) <= 10:
+                    movie_id = top10_data.get(menu_input).get('id')
+                    os.system('clear')
+                    data = search(movie_id)
+                    get_details(data, os)
+            
+        else:
             os.system('clear')
-            quit()
 
 def render_home(json):
     print("Welcome To The Python Movie Library!\
@@ -58,30 +72,38 @@ def search(input):
                 }
         response = requests.request("GET", url, headers=headers, params=querystring)
         json_data = json.loads(response.text)['d']
-        for i in range(len(json_data)):
-            print(f"Result: {i + 1}   Title: {json_data[i].get('l')}   Year: {json_data[i].get('y', 'Not Found')}\n")
+        if len(json_data) > 1:
+            for i in range(len(json_data)):
+                print(f"Result: {i + 1}   Title: {json_data[i].get('l')}   Year: {json_data[i].get('y', 'Not Found')}\n")
         return json_data
     except:
         pass
 
 def get_details(data , os):
-    while True:
-        input_results = input('Enter the "Result" number to get more details... \
-                or "q" to quit.\n')
-        if input_results.isdigit():
-            os.system('clear')
-            num = int(input_results) - 1
-            res = data[num]
-            print(f"{res.get('l')}  ({res.get('y', 'Not Found')})\n")
-            print(f"Category: {res.get('qid').capitalize()}")
-            print(f"IMDB Rank: {res.get('rank')}")
-            print(f"Stars: {res.get('s')}\n")
-            break
-        if input_results.lower() == 'q':
-            os.system('clear')
-            break
-        else:
-            print('Invalid: Enter a "Result" number.')
+    if len(data) > 1:
+        while True:
+            input_results = input('Enter the "Result" number to get more details... \
+                    or "q" to quit.\n')
+            if input_results.isdigit():
+                os.system('clear')
+                num = int(input_results) - 1
+                res = data[num]
+                print_details(res)
+                break
+            if input_results.lower() == 'q':
+                os.system('clear')
+                break
+            else:
+                print('Invalid: Enter a "Result" number.')
+    else:
+        res = data[0]
+        print_details(res)
+
+def print_details(res):
+    print(f"{res.get('l')}  ({res.get('y', 'Not Found')})\n")
+    print(f"Category: {res.get('qid').capitalize()}")
+    print(f"IMDB Rank: {res.get('rank')}")
+    print(f"Stars: {res.get('s')}\n")
 
 def quit():
     import time
