@@ -41,8 +41,9 @@ def render_home(json):
     with open(movies, 'r') as openfile:
         json_object = json.load(openfile)
         for rank, movie in json_object.items():
-            print(rank, ": ", movie)
+            print(rank, ": ", movie.get('title'))
         print("")
+        return json_object
 
 def search(input):
     import requests
