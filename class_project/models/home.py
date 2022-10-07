@@ -1,3 +1,5 @@
+"""Alta3 Research | BCopeland
+    Handles Displaying the home page"""
 import os
 import json
 
@@ -13,6 +15,7 @@ def display_home():
 
 
 def open_json():
+    """Presents data file for the top10 list"""
     top10_file = "./data/default_top10.json"
     with open(top10_file, 'r', encoding='UTF-8') as openfile:
         json_object = json.load(openfile)
